@@ -3,6 +3,7 @@
 // @namespace http://naonie.com/projects/twitter_expand_url.html
 // @description expand shorten twitter short links in tweet body
 // @require http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js
+// @version 0.1.1
 // @include https://twitter.com/*
 // ==/UserScript==
 
