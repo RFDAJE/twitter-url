@@ -3,33 +3,29 @@
 // @namespace http://naonie.com/projects/twitter_expand_url.html
 // @description expand shorten twitter short links in tweet body
 // @require http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js
-// @version 0.1.1
+// @version 0.1.2
 // @include https://twitter.com/*
 // ==/UserScript==
-
-/*
-    TODO
-
-    KNOWN ISSUES
-
-    in tweet conversion
-     * links in replies not work
-     * if the detail contains a tweet link, and the tweet preview has a link
-       it won't work as espected
-     * the pathname of some of the google group links is being truncated
-
-     * if the links is not expanded as expected, please try to reload
- */
-
 
 var TwitterUrl = {
 
     shrinked: function(e) {
-        var $target = $(e.target);
+        var $target = $(e.target),
+            $related_node = $(e.relatedNode);
 
-        // tweet detail
+        /* main timeline tweet */
+        if ($target.attr("data-item-type") === "tweet") {
+            TwitterUrl.search_links($target.find(".tweet-text"));
+        }
+
+        /* tweet pane */
         if ($target.find(".conversation").length === 1) {
             $(window).trigger("SidepanePopout", {"tweet_popped_out": $target});
+        }
+
+        /* tweet page */
+        if ($related_node.hasClass("components-middle")) {
+            TwitterUrl.search_links($target.find(".tweet-text"));
         }
     },
 
@@ -55,7 +51,15 @@ var TwitterUrl = {
             /* cache used for pane out short url lookup */
             short_url_in_cache = this.get_cache(short_url);
             if (short_url_in_cache) {
+                /* dealt with attr event, which twitter try to resolve all
+                   shortened url
+                 */
                 full_url = short_url_in_cache;
+            } else {
+                /* on tweet text inserted event, dealt with some extreme case,
+                   where innerHTML haven't been expanded.
+                 */
+                full_url = $link.attr("data-expanded-url");
             }
 
             this.expand_link($link, short_url, full_url);
@@ -108,7 +112,8 @@ var TwitterUrl = {
 }
 
 /* url is not shortened, and part of the url is hided deliberately */
-$(window).on("DOMNodeInserted", ".main-content, .details-pane-shell",
+$(window).on("DOMNodeInserted",
+    ".main-content, .details-pane-shell, .page-container",
     TwitterUrl, TwitterUrl.shrinked);
 
 /* url is shortended , .main-content use to filter DOMAttrModified events comes
