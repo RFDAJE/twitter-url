@@ -82,6 +82,8 @@ var TwitterUrl = {
             if (full_url.indexOf("http") === 0) {
                 $target.prop("href", full_url);
                 $target.prop("title", full_url);
+                /* in case some tweets has non-expanded url on this attribute */
+                $target.attr("data-expanded-url", full_url);
             }
         }
     },
