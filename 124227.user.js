@@ -3,31 +3,11 @@
 // @namespace http://naonie.com/projects/twitter_expand_url.html
 // @description expand shorten twitter short links in tweet body
 // @require http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js
-// @version 0.1.2
+// @version 0.2
 // @include https://twitter.com/*
 // ==/UserScript==
 
 var TwitterUrl = {
-
-    shrinked: function(e) {
-        var $target = $(e.target),
-            $related_node = $(e.relatedNode);
-
-        /* main timeline tweet */
-        if ($target.attr("data-item-type") === "tweet") {
-            TwitterUrl.search_links($target.find(".tweet-text"));
-        }
-
-        /* tweet pane */
-        if ($target.find(".conversation").length === 1) {
-            $(window).trigger("SidepanePopout", {"tweet_popped_out": $target});
-        }
-
-        /* tweet page */
-        if ($related_node.hasClass("components-middle")) {
-            TwitterUrl.search_links($target.find(".tweet-text"));
-        }
-    },
 
     set_cache: function(short_url, full_url) {
         $.data(document.body, short_url, full_url);
@@ -113,15 +93,10 @@ var TwitterUrl = {
     }
 }
 
-/* url is not shortened, and part of the url is hided deliberately */
-$(window).on("DOMNodeInserted",
-    ".main-content, .details-pane-shell, .page-container",
-    TwitterUrl, TwitterUrl.shrinked);
-
 /* url is shortended , .main-content use to filter DOMAttrModified events comes
    out of pane out event, which is interfere changes of attributes(auto set
    value back) */
-$(window).on("DOMAttrModified", ".main-content",
+$(window).on("DOMAttrModified", "",
     TwitterUrl, TwitterUrl.shortened);
 
 /* on page load up, twitter try to resolve shortened url automatically */
