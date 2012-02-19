@@ -1,23 +1,15 @@
-Greasemonkey script
+HOMEPAGE
+========
 
-expand shortened and shrinked links in tweet body.
-
-install url: http://userscripts.org/scripts/show/124227
+https://github.com/seenxu/twitter-url
 
 KNOWN ISSUES
-**in tweet conversion pane**
-  * links in replies not work
-  * if the detail contains a tweet link, and the tweet preview has a link it won't work as espected
-  * the pathname of some of the google group links is being truncated 
+============
 
-* if the links is not expanded as expected, please try to reload
+* url on single tweet page won't work, because twitter hasn't resolve them automatically 
+* if the links is not expanded as expected, please try to reload the page
 
 COMPATIBILITY
-Tested only on Linux with Firefox
+=============
 
-VERSION
-@0.1.1 02.02.2012
-twitter won't save full url in title attribute, use data-ultimate-url instead
-
-@0.1 26.01.2012
-release
+Tested only on Linux with Firefox 10
